@@ -1,21 +1,18 @@
-from flask import request
-from flask import Flask
+from flask import Flask, request, render_template
+import docker
+
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = str(hex(id(1232132132131)))
+client = docker.from_env()
 
-# @app.route('/login', methods=['POST', 'GET'])
-# def login():
-#     error = None
-#     if request.method == 'POST':
-#         if True:
-#             return request.form['username']
-#         else:
-#             error = 'Invalid username/password'
-#     # the code below is executed if the request method
-#     # was GET or the credentials were invalid
-#     return "<p>Hello</p>"
+@app.route('/', methods=["GET", "POST"])
+def base_page():
+    if request.method == 'POST':
+        docker_image = request.form['docker_image']
+        command = request.form['command']
+        client.containers.run(docker_image, command)
 
-@app.route('/guide', methods=["GET", "POST"])
-def add_guide():
-    title = request.form['title']
-    return '<p>Hello!</p>'
+        return render_template('index.html')
+
+    return render_template('index.html')
