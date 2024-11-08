@@ -13,6 +13,6 @@ def base_page():
         command = request.form['command']
         client.containers.run(docker_image, command)
 
-        return render_template('index.html')
+        return render_template('old_index.html')
 
-    return render_template('index.html')
+    return render_template('old_index.html')
