@@ -3,6 +3,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from .models import User
 from . import db
 from flask_login import login_user, login_required, logout_user
+from git_operations import init_git_repo_for_user
 
 auth = Blueprint('auth',__name__)
 
@@ -42,7 +43,7 @@ def signup_post():
         return redirect(url_for('auth.signup'))
 
     new_user = User(email=email, password=generate_password_hash(password, method='pbkdf2:sha256'), name=name)
-    print('aici e user-ul' + str(new_user))
+    init_git_repo_for_user(str(name))
 
     db.session.add(new_user)
     db.session.commit()
